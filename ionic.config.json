@@ -1,0 +1,7 @@
+{
+  "name": "mil-grau-adega",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
