@@ -27,10 +27,10 @@ interface ClientModel {
 }
 
 interface OrderModel {
-  id: number,
-  value: number,
-  dateOfOrder: Date,
-  client: ClientModel,
+  id: number;
+  value: number;
+  dateOfOrder: Date;
+  client: ClientModel;
 }
 
 const Orders: React.FC = () => {
