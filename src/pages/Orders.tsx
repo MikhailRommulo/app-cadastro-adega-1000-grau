@@ -69,13 +69,17 @@ const Orders: React.FC = () => {
                   <IonBadge color="primary">R$ {order.value.toLocaleString( 'pt-BR',{minimumFractionDigits: 2})}</IonBadge>
                 </IonRow>
                 <IonRow className="ion-justify-content-between">
-                  <IonButton color="danger">
-                    <IonIcon icon={trash} />
-                    <strong>apagar</strong>
+                  <IonButton color="mendium">
+                    <IonLabel color="danger">
+                      <IonIcon icon={trash} />
+                      <strong>apagar</strong>
+                    </IonLabel>  
                   </IonButton>
-                  <IonButton color="warning">
-                    <IonIcon icon={pencil} />
-                    <strong>editar</strong>
+                  <IonButton color="mendium">
+                    <IonLabel color="warning">
+                      <IonIcon icon={pencil} />
+                      <strong>editar</strong>
+                    </IonLabel>
                   </IonButton>
                 </IonRow>
               </IonGrid>
