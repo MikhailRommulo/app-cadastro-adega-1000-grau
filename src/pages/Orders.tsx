@@ -1,9 +1,51 @@
-import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import React, { useState, useEffect } from 'react';
+import { IonContent,
+         IonHeader,
+         IonPage,
+         IonTitle,
+         IonToolbar,
+         IonList,
+         IonItem,
+         IonBadge,
+         IonLabel,
+         IonGrid,
+         IonRow,
+         IonButton,
+         IonIcon, 
+         IonFab,
+         IonFabButton} from '@ionic/react';
+import { trash, pencil, addOutline } from 'ionicons/icons';
 import './Orders.css';
+import axios from 'axios';
+import formatDateBrazil from '../utils/formatDateBrazil';
+
+interface ClientModel {
+  id: string,
+  name: string,
+  phoneContact: string,
+  email: string,
+}
+
+interface OrderModel {
+  id: number,
+  value: number,
+  dateOfOrder: Date,
+  client: ClientModel,
+}
 
 const Orders: React.FC = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    axios.get('https://adega-1000-grau.herokuapp.com/orders')
+      .then(res => {
+        setOrders(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -11,13 +53,41 @@ const Orders: React.FC = () => {
           <IonTitle>Pedidos</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+      <IonContent className="ion-padding">
+        <IonList>
+          {orders.map( (order: OrderModel) => (
+            <IonItem lines="none">
+              <IonGrid>
+                <IonRow className="ion-margin-bottom ion-justify-content-between">
+                  <IonBadge className="ion-padding-horizontal" color="medium">{order.id}</IonBadge>
+                  <IonLabel className="ion-text-wrap">
+                    {formatDateBrazil(order.dateOfOrder)}
+                  </IonLabel>
+                </IonRow>
+                <IonRow className="ion-margin-bottom ion-justify-content-between">
+                  <IonLabel className="ion-text-wrap">{order.client.name}</IonLabel>
+                  <IonBadge color="primary">R$ {order.value.toLocaleString( 'pt-BR',{minimumFractionDigits: 2})}</IonBadge>
+                </IonRow>
+                <IonRow className="ion-justify-content-between">
+                  <IonButton color="danger">
+                    <IonIcon icon={trash} />
+                    <strong>apagar</strong>
+                  </IonButton>
+                  <IonButton color="warning">
+                    <IonIcon icon={pencil} />
+                    <strong>editar</strong>
+                  </IonButton>
+                </IonRow>
+              </IonGrid>
+            </IonItem>
+          )
+          )}
+        </IonList>
+        <IonFab vertical="bottom" horizontal="end" slot="fixed">
+          <IonFabButton>
+            <IonIcon icon={addOutline} />
+          </IonFabButton>
+        </IonFab>
       </IonContent>
     </IonPage>
   );
