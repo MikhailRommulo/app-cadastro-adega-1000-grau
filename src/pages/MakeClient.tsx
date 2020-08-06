@@ -26,6 +26,7 @@ const MakeClient: React.FC = () => {
 
   const [id, setId] = useState<string>();
   const [name, setName] = useState<string>();
+  const [address, setAddres] = useState<string>();
   const [phoneContact, setPhoneContact] = useState<string>();
   const [email, setEmail] = useState<string>();
 
@@ -34,6 +35,7 @@ const MakeClient: React.FC = () => {
       const clientPass = history.location.state as ClientModel;
       setId(clientPass.id);
       setName(clientPass.name);
+      setAddres(clientPass.address);
       setPhoneContact(clientPass.phoneContact);
       setEmail(clientPass.email);
     } else {
@@ -45,6 +47,7 @@ const MakeClient: React.FC = () => {
     if (id) {
       axios.put(`https://adega-1000-grau.herokuapp.com/clients/${id}`, {
         name,
+        address,
         phoneContact,
         email
       })
@@ -54,6 +57,7 @@ const MakeClient: React.FC = () => {
     } else {
       axios.post('https://adega-1000-grau.herokuapp.com/clients', {
         name,
+        address,
         phoneContact,
         email
       })
@@ -92,6 +96,15 @@ const MakeClient: React.FC = () => {
               type="text"
               value={name}
               onIonChange={e => { setName(e.detail.value!) }}
+            ></IonInput>
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating">Endereço</IonLabel>
+            <IonInput
+              required
+              type="text"
+              value={address}
+              onIonChange={e => { setAddres(e.detail.value!) }}
             ></IonInput>
           </IonItem>
           <IonItem>

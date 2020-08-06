@@ -70,7 +70,7 @@ const Clients: React.FC = () => {
                     {client.name}
                   </IonBadge>
                 </IonRow>
-                <IonRow className="ion-margin-bottom">
+                <IonRow>
                   <IonCol size="12" >
                     <IonLabel>{client.phoneContact}</IonLabel>
                   </IonCol>
@@ -80,6 +80,9 @@ const Clients: React.FC = () => {
                       {client.email}
                     </IonLabel>
                   </IonCol>
+                </IonRow>
+                <IonRow className="ion-margin-bottom">
+                  <IonLabel className="ion-text-wrap">{client.address}</IonLabel>
                 </IonRow>
                 <IonRow className="ion-justify-content-between">
                   <IonButton color="mendium" onClick={() => {
