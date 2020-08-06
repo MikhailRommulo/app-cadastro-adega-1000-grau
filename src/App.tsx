@@ -32,6 +32,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import MakeClient from './pages/MakeClient';
 
 const App: React.FC = () => (
   <IonApp>
@@ -41,6 +42,7 @@ const App: React.FC = () => (
           <Route path="/orders" component={Orders} exact={true} />
           <Route path="/clients" component={Clients} exact={true} />
           <Route path="/" render={() => <Redirect to="/orders" />} exact={true} />
+          <Route path="/make-client" component={MakeClient} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="orders" href="/orders">

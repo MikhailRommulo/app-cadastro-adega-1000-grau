@@ -56,7 +56,7 @@ const Orders: React.FC = () => {
       <IonContent className="ion-padding">
         <IonList>
           {orders.map( (order: OrderModel) => (
-            <IonItem lines="none">
+            <IonItem key={order.id} lines="none">
               <IonGrid>
                 <IonRow className="ion-margin-bottom ion-justify-content-between">
                   <IonBadge className="ion-padding-horizontal" color="medium">{order.id}</IonBadge>
