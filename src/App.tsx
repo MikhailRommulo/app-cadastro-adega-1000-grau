@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, BrowserRouter } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -9,7 +9,8 @@ import {
   IonTabButton,
   IonTabs
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+// guarda estado fazendo o useEffect não funcionar direito
+//import { IonReactRouter } from '@ionic/react-router';
 import { documentText, people } from 'ionicons/icons';
 import Orders from './pages/Orders';
 import Clients from './pages/Clients';
@@ -36,7 +37,7 @@ import MakeClient from './pages/MakeClient';
 
 const App: React.FC = () => (
   <IonApp>
-    <IonReactRouter>
+    <BrowserRouter>
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/orders" component={Orders} exact={true} />
@@ -55,7 +56,7 @@ const App: React.FC = () => (
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
-    </IonReactRouter>
+    </BrowserRouter>
   </IonApp>
 );
 

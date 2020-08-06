@@ -9,30 +9,28 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonButton
+  IonButton,
+  IonIcon,
+  IonGrid,
+  IonRow
 } from '@ionic/react';
 
 import axios from 'axios';
 import './MakeClient.css';
 import { useHistory } from 'react-router-dom';
-
-interface ClientModel {
-  id: string;
-  name: string;
-  phoneContact: string;
-  email: string;
-}
+import { arrowBack } from 'ionicons/icons';
+import { ClientModel } from '../models/client.interface';
 
 const MakeClient: React.FC = () => {
   const history = useHistory();
-  
+
   const [id, setId] = useState<string>();
   const [name, setName] = useState<string>();
   const [phoneContact, setPhoneContact] = useState<string>();
   const [email, setEmail] = useState<string>();
 
   useEffect(() => {
-    if(history.location.state) {
+    if (history.location.state) {
       const clientPass = history.location.state as ClientModel;
       setId(clientPass.id);
       setName(clientPass.name);
@@ -40,18 +38,18 @@ const MakeClient: React.FC = () => {
       setEmail(clientPass.email);
     } else {
       console.log('Não tem nada');
-    }    
+    }
   }, []);
 
   function changingOrMakeClient() {
-    if(id) {
+    if (id) {
       axios.put(`https://adega-1000-grau.herokuapp.com/clients/${id}`, {
         name,
         phoneContact,
         email
       })
         .then(() => {
-          history.goBack();
+          history.push('/clients')
         })
     } else {
       axios.post('https://adega-1000-grau.herokuapp.com/clients', {
@@ -59,59 +57,65 @@ const MakeClient: React.FC = () => {
         phoneContact,
         email
       })
-      .then(() => {
-        history.goBack();
-      })
+        .then(() => {
+          history.push('/clients')
+        })
     }
-    
   }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Cliente</IonTitle>
+          <IonGrid>
+            <IonRow>
+              <IonLabel className="arrow-back ion-margin-start" onClick={() => history.goBack()}>
+                <IonIcon icon={arrowBack} />
+              </IonLabel>
+              <IonTitle className="ion-margin-start">Cliente</IonTitle>
+            </IonRow>
+          </IonGrid>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
         <IonList lines="full">
-          <IonInput 
+          <IonInput
             type='text'
-            hidden 
+            hidden
             value={id}
-            onIonChange={e => {setId(e.detail.value!)}}
+            onIonChange={e => { setId(e.detail.value!) }}
           ></IonInput>
           <IonItem>
             <IonLabel position="floating">Nome</IonLabel>
             <IonInput
-                required 
-                type="text"
-                value={name}
-                onIonChange={e => {setName(e.detail.value!)}}
+              required
+              type="text"
+              value={name}
+              onIonChange={e => { setName(e.detail.value!) }}
             ></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">Telefone de contato</IonLabel>
             <IonInput
-                required 
-                type="text"
-                value={phoneContact}
-                onIonChange={e => {setPhoneContact(e.detail.value!)}}
+              required
+              type="text"
+              value={phoneContact}
+              onIonChange={e => { setPhoneContact(e.detail.value!) }}
             ></IonInput>
           </IonItem>
           <IonItem>
             <IonLabel position="floating">E-Mail</IonLabel>
             <IonInput
-                required 
-                type="text"
-                value={email}
-                onIonChange={e => {setEmail(e.detail.value!)}}
+              required
+              type="text"
+              value={email}
+              onIonChange={e => { setEmail(e.detail.value!) }}
             ></IonInput>
           </IonItem>
         </IonList>
-        <IonButton 
-          color="primary" 
-          expand="block" 
+        <IonButton
+          color="primary"
+          expand="block"
           className="ion-margin-top"
           onClick={changingOrMakeClient}
         >

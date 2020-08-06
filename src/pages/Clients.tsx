@@ -14,26 +14,29 @@ import {
   IonButton,
   IonIcon,
   IonFab,
-  IonFabButton
+  IonFabButton,
+  IonAlert,
+  IonCol
 } from '@ionic/react';
 
 import axios from 'axios';
 import './Clients.css';
 import { trash, pencil, addOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
-
-interface ClientModel {
-  id: string;
-  name: string;
-  phoneContact: string;
-  email: string;
-}
+import { ClientModel } from '../models/client.interface';
 
 const Clients: React.FC = () => {
   const history = useHistory();
   const [clients, setClients] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [idAlert, setIdAlert] = useState<string>();
+  const [nameAlert, setNameAlert] = useState<string>();
 
   useEffect(() => {
+    refreshClients()
+  }, []);
+
+  function refreshClients() {
     axios.get('https://adega-1000-grau.herokuapp.com/clients')
       .then(res => {
         setClients(res.data);
@@ -41,7 +44,12 @@ const Clients: React.FC = () => {
       .catch(err => {
         console.log(err);
       })
-  }, []);
+  }
+
+  function setDatasAlert (id: string, name: string) {
+    setIdAlert(id);
+    setNameAlert(name);
+  }
 
   return (
     <IonPage>
@@ -63,14 +71,21 @@ const Clients: React.FC = () => {
                   </IonBadge>
                 </IonRow>
                 <IonRow className="ion-margin-bottom">
-                  <IonLabel>{client.phoneContact}</IonLabel>
-                  <IonLabel
-                    className="ion-text-wrap">
-                    {client.email}
-                  </IonLabel>
+                  <IonCol size="12" >
+                    <IonLabel>{client.phoneContact}</IonLabel>
+                  </IonCol>
+                  <IonCol size="12">
+                    <IonLabel
+                      className="ion-text-wrap">
+                      {client.email}
+                    </IonLabel>
+                  </IonCol>
                 </IonRow>
                 <IonRow className="ion-justify-content-between">
-                  <IonButton color="mendium">
+                  <IonButton color="mendium" onClick={() => {
+                    setDatasAlert(client.id, client.name);
+                    setShowAlert(true);
+                    }}>
                     <IonLabel color="danger">
                       <IonIcon icon={trash} />
                       <strong>apagar</strong>
@@ -95,6 +110,30 @@ const Clients: React.FC = () => {
             <IonIcon icon={addOutline} />
           </IonFabButton>
         </IonFab>
+        <IonAlert 
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header={'Apagar'}
+          message={`Realmente vai excluir o(a) ${nameAlert}!`}
+          buttons={[
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancelada exclusão!')
+              }
+            },
+            {
+              text: 'Confirmar',
+              handler: () => {
+                axios.delete(`https://adega-1000-grau.herokuapp.com/clients/${idAlert}`)
+                  .then(() => {
+                    refreshClients();
+                  })
+              }
+            }
+          ]}
+        />
       </IonContent>
     </IonPage>
   );
