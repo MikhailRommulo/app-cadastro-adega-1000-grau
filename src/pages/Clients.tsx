@@ -82,7 +82,9 @@ const Clients: React.FC = () => {
                   </IonCol>
                 </IonRow>
                 <IonRow className="ion-margin-bottom">
-                  <IonLabel className="ion-text-wrap">{client.address}</IonLabel>
+                  <IonCol>
+                    <IonLabel className="ion-text-wrap">{client.address}</IonLabel>
+                  </IonCol>
                 </IonRow>
                 <IonRow className="ion-justify-content-between">
                   <IonButton color="mendium" onClick={() => {

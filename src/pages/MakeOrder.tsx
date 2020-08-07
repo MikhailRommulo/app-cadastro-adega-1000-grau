@@ -110,7 +110,7 @@ const MakeOrder: React.FC = () => {
               onIonChange={e => setClient(e.detail.value)}
             >
               {listClients.map( (clientSelect: ClientModel) => (
-                <IonSelectOption value={clientSelect}>
+                <IonSelectOption key={clientSelect.id} value={clientSelect}>
                     {clientSelect.name}
                 </IonSelectOption>
               ))}              
