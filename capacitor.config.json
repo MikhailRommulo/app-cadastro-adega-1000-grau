@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "mil-grau-adega",
+  "appId": "com.projeto.adegamilgrau",
+  "appName": "Adega mil grau",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",

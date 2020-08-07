@@ -13,30 +13,27 @@ import { IonContent,
          IonButton,
          IonIcon, 
          IonFab,
-         IonFabButton} from '@ionic/react';
+         IonFabButton,
+         IonAlert} from '@ionic/react';
 import { trash, pencil, addOutline } from 'ionicons/icons';
 import './Orders.css';
 import axios from 'axios';
 import formatDateBrazil from '../utils/formatDateBrazil';
-
-interface ClientModel {
-  id: string,
-  name: string,
-  phoneContact: string,
-  email: string,
-}
-
-interface OrderModel {
-  id: number;
-  value: number;
-  dateOfOrder: Date;
-  client: ClientModel;
-}
+import { OrderModel } from '../models/order.interface';
+import { useHistory } from 'react-router';
 
 const Orders: React.FC = () => {
+  const history = useHistory();
   const [orders, setOrders] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [idAlert, setIdAlert] = useState<number>();
+  const [nameClientAlert, setNameClientAlert] = useState<string>();
 
   useEffect(() => {
+    refreshOrders();
+  }, []);
+
+  function refreshOrders() {
     axios.get('https://adega-1000-grau.herokuapp.com/orders')
       .then(res => {
         setOrders(res.data);
@@ -44,7 +41,12 @@ const Orders: React.FC = () => {
       .catch(err => {
         console.log(err);
       })
-  }, []);
+  }
+
+  function setDatasAlert (id: number, name: string) {
+    setIdAlert(id);
+    setNameClientAlert(name);
+  }
 
   return (
     <IonPage>
@@ -65,17 +67,22 @@ const Orders: React.FC = () => {
                   </IonLabel>
                 </IonRow>
                 <IonRow className="ion-margin-bottom ion-justify-content-between">
-                  <IonLabel className="ion-text-wrap">{order.client.name}</IonLabel>
+                  <IonLabel className="ion-text-wrap">{order.client?.name}</IonLabel>
                   <IonBadge color="primary">R$ {order.value.toLocaleString( 'pt-BR',{minimumFractionDigits: 2})}</IonBadge>
                 </IonRow>
                 <IonRow className="ion-justify-content-between">
                   <IonButton color="mendium">
-                    <IonLabel color="danger">
+                    <IonLabel color="danger" onClick={() => {
+                    setDatasAlert(order.id, order.client.name);
+                    setShowAlert(true);
+                    }}>
                       <IonIcon icon={trash} />
                       <strong>apagar</strong>
                     </IonLabel>  
                   </IonButton>
-                  <IonButton color="mendium">
+                  <IonButton color="mendium" onClick={() => {
+                    history.push('/make-order', order);
+                  }}>
                     <IonLabel color="warning">
                       <IonIcon icon={pencil} />
                       <strong>editar</strong>
@@ -88,10 +95,38 @@ const Orders: React.FC = () => {
           )}
         </IonList>
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton>
+          <IonFabButton onClick={() => {
+            history.push('/make-order');
+          }}>
             <IonIcon icon={addOutline} />
           </IonFabButton>
         </IonFab>
+        <IonAlert 
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header={'Apagar'}
+          message={`
+            Realmente vai excluir o pedido ${idAlert} do cliente ${nameClientAlert}!`
+          }
+          buttons={[
+            {
+              text: 'Cancelar',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancelada exclusão!')
+              }
+            },
+            {
+              text: 'Confirmar',
+              handler: () => {
+                axios.delete(`https://adega-1000-grau.herokuapp.com/orders/${idAlert}`)
+                  .then(() => {
+                    refreshOrders();
+                  })
+              }
+            }
+          ]}
+        />
       </IonContent>
     </IonPage>
   );
