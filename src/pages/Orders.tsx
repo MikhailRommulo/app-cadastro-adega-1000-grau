@@ -17,10 +17,10 @@ import { IonContent,
          IonAlert} from '@ionic/react';
 import { trash, pencil, addOutline } from 'ionicons/icons';
 import './Orders.css';
-import axios from 'axios';
 import formatDateBrazil from '../utils/formatDateBrazil';
 import { OrderModel } from '../models/order.interface';
 import { useHistory } from 'react-router';
+import api from '../services/api';
 
 const Orders: React.FC = () => {
   const history = useHistory();
@@ -34,7 +34,7 @@ const Orders: React.FC = () => {
   }, []);
 
   function refreshOrders() {
-    axios.get('https://adega-1000-grau.herokuapp.com/orders')
+    api.get('orders')
       .then(res => {
         setOrders(res.data);
       })
@@ -119,7 +119,7 @@ const Orders: React.FC = () => {
             {
               text: 'Confirmar',
               handler: () => {
-                axios.delete(`https://adega-1000-grau.herokuapp.com/orders/${idAlert}`)
+                api.delete(`orders/${idAlert}`)
                   .then(() => {
                     refreshOrders();
                   })

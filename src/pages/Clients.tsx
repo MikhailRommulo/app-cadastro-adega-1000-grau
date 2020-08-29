@@ -19,11 +19,11 @@ import {
   IonCol
 } from '@ionic/react';
 
-import axios from 'axios';
 import './Clients.css';
 import { trash, pencil, addOutline } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import { ClientModel } from '../models/client.interface';
+import api from '../services/api';
 
 const Clients: React.FC = () => {
   const history = useHistory();
@@ -37,7 +37,7 @@ const Clients: React.FC = () => {
   }, []);
 
   function refreshClients() {
-    axios.get('https://adega-1000-grau.herokuapp.com/clients')
+    api.get('clients')
       .then(res => {
         setClients(res.data);
       })
@@ -131,7 +131,7 @@ const Clients: React.FC = () => {
             {
               text: 'Confirmar',
               handler: () => {
-                axios.delete(`https://adega-1000-grau.herokuapp.com/clients/${idAlert}`)
+                api.delete(`clients/${idAlert}`)
                   .then(() => {
                     refreshClients();
                   })

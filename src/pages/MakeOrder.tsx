@@ -18,12 +18,12 @@ import {
   IonDatetime
 } from '@ionic/react';
 
-import axios from 'axios';
 import './MakeClient.css';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
 import { OrderModel } from '../models/order.interface';
 import { ClientModel } from '../models/client.interface';
+import api from '../services/api';
 
 const MakeOrder: React.FC = () => {
   const history = useHistory();
@@ -50,7 +50,7 @@ const MakeOrder: React.FC = () => {
   }, []);
 
   function populateClients() {
-    axios.get('https://adega-1000-grau.herokuapp.com/clients')
+    api.get('clients')
         .then((res) => {
             setListClients(res.data);
         })
@@ -58,7 +58,7 @@ const MakeOrder: React.FC = () => {
 
   function changingOrMakeOrder() {
     if (id) {
-      axios.put(`https://adega-1000-grau.herokuapp.com/orders/${id}`, {
+      api.put(`orders/${id}`, {
         client,
         value,
         dateOfOrder
@@ -67,7 +67,7 @@ const MakeOrder: React.FC = () => {
           history.push('/orders')
         })
     } else {
-      axios.post('https://adega-1000-grau.herokuapp.com/orders', {
+      api.post('orders', {
         client,
         value,
         dateOfOrder

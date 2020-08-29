@@ -15,11 +15,11 @@ import {
   IonRow
 } from '@ionic/react';
 
-import axios from 'axios';
 import './MakeClient.css';
 import { useHistory } from 'react-router-dom';
 import { arrowBack } from 'ionicons/icons';
 import { ClientModel } from '../models/client.interface';
+import api from '../services/api';
 
 const MakeClient: React.FC = () => {
   const history = useHistory();
@@ -45,7 +45,7 @@ const MakeClient: React.FC = () => {
 
   function changingOrMakeClient() {
     if (id) {
-      axios.put(`https://adega-1000-grau.herokuapp.com/clients/${id}`, {
+      api.put(`clients/${id}`, {
         name,
         address,
         phoneContact,
@@ -55,7 +55,7 @@ const MakeClient: React.FC = () => {
           history.push('/clients')
         })
     } else {
-      axios.post('https://adega-1000-grau.herokuapp.com/clients', {
+      api.post('clients', {
         name,
         address,
         phoneContact,
